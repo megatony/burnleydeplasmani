@@ -1,9 +1,21 @@
 version: "2.1"
-
-networks:
-  test:
-
 services:
+  mongo:
+    image: mongo:3.2.4
+    ports:
+      - 27017:27017
+    command: --smallfiles
+
+  mongo-client:
+    image: mongoclient/mongoclient
+    ports:
+      - 3030:3000
+    environment:
+      - MONGOCLIENT_DEFAULT_CONNECTION_URL=mongodb://mongo:27017
+    volumes:
+      - ./data/db:/data/db
+    links:
+      - mongo
   app:
     build:
       context: .
@@ -11,11 +23,6 @@ services:
     ports:
       - "18080:8080"
     depends_on:
-      [mongodb]
-    networks:
-      - test
-  mongodb:
-    image: mongo:latest
-    container_name: "mongodb"
-    ports:
-      - 27017:27017
+      [mongo]
+    links:
+      - mongo

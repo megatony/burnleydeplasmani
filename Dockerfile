@@ -6,13 +6,13 @@ WORKDIR /usr/src/app
 COPY ./pom.xml .
 
 # Download the package and make it cached in docker image
-RUN mvn -B -f ./pom.xml -s /usr/share/maven/ref/settings-docker.xml dependency:resolve
+RUN mvn -Dmaven.test.skip=true -B -f ./pom.xml -s /usr/share/maven/ref/settings-docker.xml dependency:resolve
 
 # Copy the actual code
 COPY ./ .
 
 # Then build the code
-RUN mvn -B -f ./pom.xml -s /usr/share/maven/ref/settings-docker.xml package
+RUN mvn -Dmaven.test.skip=true -B -f ./pom.xml -s /usr/share/maven/ref/settings-docker.xml package
 
 # The rest is same as usual
 EXPOSE 8888
