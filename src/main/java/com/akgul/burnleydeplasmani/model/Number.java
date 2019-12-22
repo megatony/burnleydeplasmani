@@ -1,34 +1,38 @@
 package com.akgul.burnleydeplasmani.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
+@Document(collection = "number")
 public class Number {
     private static final String NUMBER_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     @Id
+    @JsonIgnore
     private String id;
 
     @JsonProperty("number")
     @Indexed(unique = true)
-    private int value;
+    private Integer value;
 
     @JsonProperty("insert_time")
     @JsonFormat(pattern = NUMBER_DATE_FORMAT)
-    private ZonedDateTime insertTime;
+    private LocalDateTime insertTime;
 
-    public Number(int value) {
+    public Number(Integer value) {
         this.value = value;
-        this.insertTime = ZonedDateTime.now();
+        this.insertTime = LocalDateTime.now();
     }
 
     @Override
